@@ -51,6 +51,10 @@ class InitArguments
      */
     public string $autoload = '';
 
+    /**
+     * Convert the arguments to an array of options
+     * @return array
+     */
     public function toOptions(): array
     {
         $options = [];

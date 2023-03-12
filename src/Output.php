@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Output implements OutputInterface
 {
+    public int $exitCode = 0;
     private string $message = '';
     private int $verbosity = self::VERBOSITY_NORMAL;
     private bool $decorated = false;

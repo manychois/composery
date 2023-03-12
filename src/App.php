@@ -12,6 +12,13 @@ class App
 {
     /**
      * Creates a basic composer.json file in current directory
+     * @param InitArguments $args Arguments to pass to `composer init`.
+     * @return Output The command result.
+     * Exit codes:
+     *
+     * - 0: OK
+     * - 1: Generic/unknown error code
+     * - 2: Dependency solving error code
      */
     public function init(InitArguments $args): Output
     {
@@ -33,7 +40,7 @@ class App
         $composer = new Application();
         $composer->setAutoExit(false);
         $output = new Output();
-        $composer->run($input, $output);
+        $output->exitCode = $composer->run($input, $output);
         return $output;
     }
 }

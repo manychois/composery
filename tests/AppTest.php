@@ -11,6 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 class AppTest extends TestCase
 {
+    private const XDEBUG_WARNING = '<warning>' .
+        'Composer is operating slower than normal because you have Xdebug enabled. ' .
+        'See https://getcomposer.org/xdebug' .
+        '</warning>';
     private string $prevCwd;
     private string $cwd;
 
@@ -75,11 +79,11 @@ class AppTest extends TestCase
 
         $output = $app->init($args);
         $expectedMessage = [
-            '<warning>Composer is operating slower than normal because you have Xdebug enabled. See https://getcomposer.org/xdebug</warning>',
+            self::XDEBUG_WARNING,
             'Writing ./composer.json',
             'PSR-4 autoloading configured. Use "<comment>namespace Manychois\Test;</comment>" in src/',
             'Include the Composer autoloader with: <comment>require \'vendor/autoload.php\';</comment>',
-            ''
+            '',
         ];
         static::assertEquals(implode("\n", $expectedMessage), $output->getMessage());
 
