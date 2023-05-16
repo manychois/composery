@@ -7,14 +7,11 @@ namespace Manychois\ComposeryTests;
 use Exception;
 use Manychois\Composery\App;
 use Manychois\Composery\InitArguments;
+use Manychois\Composery\InstallArguments;
 use PHPUnit\Framework\TestCase;
 
 class AppTest extends TestCase
 {
-    private const XDEBUG_WARNING = '<warning>' .
-        'Composer is operating slower than normal because you have Xdebug enabled. ' .
-        'See https://getcomposer.org/xdebug' .
-        '</warning>';
     private string $prevCwd;
     private string $cwd;
 
@@ -26,20 +23,48 @@ class AppTest extends TestCase
         if (!$success) {
             throw new Exception("Failed to change directory to {$this->cwd}");
         }
-        if (file_exists($this->cwd . '/composer.json')) {
-            throw new Exception("{$this->cwd}/composer.json already exists");
+        $shouldNotPresent = ['composer.json', 'composer.lock', 'src', 'vendor'];
+        foreach ($shouldNotPresent as $path) {
+            if (file_exists($path)) {
+                throw new Exception("$path already exists");
+            }
         }
     }
 
     protected function tearDown(): void
     {
-        $success = unlink($this->cwd . '/composer.json');
-        if (!$success) {
-            throw new Exception("Failed to delete {$this->cwd}/composer.json");
+        $shouldNotPresent = ['composer.json', 'composer.lock', 'src', 'vendor'];
+        foreach ($shouldNotPresent as $path) {
+            $success = $this->rmr("{$this->cwd}/$path");
+            if (!$success && file_exists($path)) {
+                throw new Exception("Failed to delete {$this->cwd}/$path");
+            }
         }
         $success = chdir($this->prevCwd);
         if (!$success) {
             throw new Exception("Failed to change directory to {$this->prevCwd}");
+        }
+    }
+
+    private function rmr(string $path): bool
+    {
+        if (!file_exists($path)) {
+            return true;
+        }
+        if (is_dir($path)) {
+            $hasFailedCase = false;
+            foreach (scandir($path) as $file) {
+                if ($file === '.' || $file === '..') continue;
+                $fullPath = "$path/$file";
+                if (is_dir($fullPath)) {
+                    $hasFailedCase |= !$this->rmr($fullPath);
+                } else {
+                    $hasFailedCase |= !unlink($fullPath);
+                }
+            }
+            return rmdir($path) && !$hasFailedCase;
+        } else {
+            return unlink($path);
         }
     }
 
@@ -78,14 +103,17 @@ class AppTest extends TestCase
         $args->autoload = 'src/';
 
         $output = $app->init($args);
-        $expectedMessage = [
-            self::XDEBUG_WARNING,
+        $expectedMessageLines = [
             'Writing ./composer.json',
             'PSR-4 autoloading configured. Use "<comment>namespace Manychois\Test;</comment>" in src/',
             'Include the Composer autoloader with: <comment>require \'vendor/autoload.php\';</comment>',
-            '',
         ];
-        static::assertEquals(implode("\n", $expectedMessage), $output->getMessage());
+        foreach ($expectedMessageLines as $line) {
+            static::assertStringContainsStringIgnoringLineEndings(
+                $line,
+                $output->getMessage(),
+            );
+        }
 
         $expectedComposerJson = <<<'JSON'
 {
@@ -140,5 +168,82 @@ class AppTest extends TestCase
 JSON;
         $actualComposerJson = file_get_contents($this->cwd . '/composer.json');
         static::assertEquals($expectedComposerJson, $actualComposerJson);
+    }
+
+    public function testInstall(): void
+    {
+        $json = <<<'JSON'
+{
+    "name": "manychois/test",
+    "description": "Test project",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "composer/composer": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    }
+}
+JSON;
+        if (!file_put_contents($this->cwd . '/composer.json', $json)) {
+            throw new Exception("Failed to write {$this->cwd}/composer.json");
+        }
+        $app = new App();
+        $args = new InstallArguments();
+        $args->preferInstall = 'dist';
+        $args->noDev = true;
+        $output = $app->install($args);
+        static::assertStringContainsStringIgnoringLineEndings(
+            'Installing <info>composer/composer</info>',
+            $output->getMessage(),
+        );
+        static::assertStringContainsStringIgnoringLineEndings(
+            '<info>Generating autoload files</info>',
+            $output->getMessage(),
+        );
+    }
+
+    public function testInstallDryRun(): void
+    {
+        $json = <<<'JSON'
+{
+    "name": "manychois/test",
+    "description": "Test project",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "composer/composer": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    }
+}
+JSON;
+        if (!file_put_contents($this->cwd . '/composer.json', $json)) {
+            throw new Exception("Failed to write {$this->cwd}/composer.json");
+        }
+        $app = new App();
+        $args = new InstallArguments();
+        $args->dryRun = true;
+        $output = $app->install($args);
+        static::assertStringContainsStringIgnoringLineEndings(
+            'Installing <info>composer/composer</info>',
+            $output->getMessage(),
+        );
+        static::assertStringNotContainsStringIgnoringCase(
+            '<info>Generating autoload files</info>',
+            $output->getMessage(),
+        );
+
+        foreach (scandir($this->cwd) as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+            if ($file === 'README.md' || $file === 'composer.json') {
+                continue;
+            }
+            static::fail("Unexpected file {$file} in {$this->cwd}");
+        }
     }
 }

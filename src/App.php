@@ -8,21 +8,27 @@ use Composer\Console\Application;
 use Manychois\Composery\Output;
 use Symfony\Component\Console\Input\ArrayInput;
 
+/**
+ * A wrapper around Composer's Application class to make it easier to use.
+ */
 class App
 {
     /**
      * Creates a basic composer.json file in current directory
      * @param InitArguments $args Arguments to pass to `composer init`.
      * @return Output The command result.
-     * Exit codes:
-     *
-     * - 0: OK
-     * - 1: Generic/unknown error code
-     * - 2: Dependency solving error code
      */
     public function init(InitArguments $args): Output
     {
         $inputArgs = ['command' => 'init'];
+        $inputArgs = array_merge($inputArgs, $args->toOptions());
+        $input = new ArrayInput($inputArgs);
+        return $this->run($input);
+    }
+
+    public function install(InstallArguments $args): Output
+    {
+        $inputArgs = ['command' => 'install'];
         $inputArgs = array_merge($inputArgs, $args->toOptions());
         $input = new ArrayInput($inputArgs);
         return $this->run($input);
