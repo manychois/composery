@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-class InstallArguments
+class InstallArguments extends Arguments
 {
     /**
      * Sets how composer should install a package:
@@ -93,7 +93,7 @@ class InstallArguments
      */
     public function toOptions(): array
     {
-        $options = [];
+        $options = parent::toOptions();
         if ($this->preferInstall) {
             $options['--prefer-install'] = $this->preferInstall;
         }

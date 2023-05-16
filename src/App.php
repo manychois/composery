@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 class App
 {
     /**
-     * Creates a basic composer.json file in current directory
+     * Creates a basic composer.json file in current directory.
      * @param InitArguments $args Arguments to pass to `composer init`.
      * @return Output The command result.
      */
@@ -26,6 +26,11 @@ class App
         return $this->run($input);
     }
 
+    /**
+     * Installs the project dependencies from the composer.lock file if present, or falls back on the composer.json.
+     * @param InstallArguments $args Arguments to pass to `composer install`.
+     * @return Output The command result.
+     */
     public function install(InstallArguments $args): Output
     {
         $inputArgs = ['command' => 'install'];

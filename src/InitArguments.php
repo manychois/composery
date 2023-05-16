@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-class InitArguments
+class InitArguments extends Arguments
 {
     /**
      * Name of the package
@@ -62,7 +62,7 @@ class InitArguments
      */
     public function toOptions(): array
     {
-        $options = [];
+        $options = parent::toOptions();
         if ($this->name) {
             $options['--name'] = $this->name;
         }
