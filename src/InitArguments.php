@@ -28,10 +28,13 @@ class InitArguments
     public string $homepage = '';
     /**
      * 'Package to require with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or "foo/bar 1.0.0"
+     * @var array<string>
      */
     public array $require = [];
     /**
-     * Package to require for development with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or "foo/bar 1.0.0"
+     * Package to require for development with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or
+     * "foo/bar 1.0.0"
+     * @var array<string>
      */
     public array $requireDev = [];
     /**
@@ -43,17 +46,19 @@ class InitArguments
      */
     public string $license = '';
     /**
-     * Add custom repositories, either by URL or using JSON arrays
+     * Add custom repositories, either by URL or using JSON arrays.
+     * @var array<string>
      */
     public array $repository = [];
     /**
-     * Add PSR-4 autoload mapping. Maps your package\'s namespace to the provided directory. (Expects a relative path, e.g. src/)
+     * Add PSR-4 autoload mapping. Maps your package\'s namespace to the provided directory.
+     * (Expects a relative path, e.g. src/)
      */
     public string $autoload = '';
 
     /**
      * Convert the arguments to an array of options
-     * @return array
+     * @return array<string, mixed>
      */
     public function toOptions(): array
     {

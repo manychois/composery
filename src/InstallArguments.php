@@ -8,7 +8,7 @@ class InstallArguments
 {
     /**
      * Sets how composer should install a package:
-     * 
+     *
      * + `dist`: Default. Install from dist.
      * + `source`: Install from source.
      * + `auto`: Install from source if the package is a dev version, otherwise install from dist.
@@ -37,7 +37,8 @@ class InstallArguments
     public bool $noAutoloader = false;
 
     /**
-     * Removes the progress display that can mess with some terminals or scripts which don't handle backspace characters.
+     * Removes the progress display that can mess with some terminals or scripts which don't handle backspace
+     * characters.
      */
     public bool $noProgress = false;
 
@@ -53,8 +54,8 @@ class InstallArguments
 
     /**
      * Convert PSR-0/4 autoloading to classmap to get a faster autoloader.
-     * This is recommended especially for production, but can take a bit of time to run so it is currently not done by default.
-     * @var bool
+     * This is recommended especially for production, but can take a bit of time to run so it is currently not done by
+     * default.
      */
     public bool $optimizeAutoloader = false;
 
@@ -66,7 +67,6 @@ class InstallArguments
 
     /**
      * Use APCu to cache found/not-found classes.
-     * @var bool
      */
     public bool $apcuAutoloader = false;
 
@@ -76,19 +76,20 @@ class InstallArguments
     public string $apcuAutoloaderPrefix = '';
 
     /**
-     * Ignore all platform requirements (php, hhvm, lib-* and ext-*) and force the installation even if the local machine does not fulfill these.
+     * Ignore all platform requirements (php, hhvm, lib-* and ext-*) and force the installation even if the local
+     * machine does not fulfill these.
      */
     public bool $ignorePlatformReqs = false;
 
     /**
-     * Ignore a specific platform requirement(php, hhvm, lib-* and ext-*) and force the installation even if the local machine does not fulfill it.
-     * @var string
+     * Ignore a specific platform requirement(php, hhvm, lib-* and ext-*) and force the installation even if the local
+     * machine does not fulfill it.
      */
     public string $ignorePlatformReq = '';
 
     /**
      * Convert the arguments to an array of options
-     * @return array
+     * @return array<string, mixed>
      */
     public function toOptions(): array
     {

@@ -54,7 +54,9 @@ class AppTest extends TestCase
         if (is_dir($path)) {
             $hasFailedCase = false;
             foreach (scandir($path) as $file) {
-                if ($file === '.' || $file === '..') continue;
+                if ($file === '.' || $file === '..') {
+                    continue;
+                }
                 $fullPath = "$path/$file";
                 if (is_dir($fullPath)) {
                     $hasFailedCase |= !$this->rmr($fullPath);
