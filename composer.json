@@ -45,7 +45,7 @@
     ],
     "phpcs": "phpcs --standard=phpcs.xml -s",
     "phpcbf": "phpcbf --standard=phpcs.xml || true",
-    "format": [
+    "code": [
       "@phpcbf",
       "@phpcs"
     ]

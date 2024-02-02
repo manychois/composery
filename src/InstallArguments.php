@@ -4,105 +4,146 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-class InstallArguments extends Arguments
+use Manychois\Composery\ArgumentOptions\AuditFormat;
+use Manychois\Composery\ArgumentOptions\InstallPreference;
+
+class InstallArguments extends AbstractArguments
 {
     /**
-     * Sets how composer should install a package:
-     *
-     * + `dist`: Default. Install from dist.
-     * + `source`: Install from source.
-     * + `auto`: Install from source if the package is a dev version, otherwise install from dist.
+     * Sets how composer should install a package.
      */
-    public string $preferInstall = '';
+    public ?InstallPreference $preferInstall = null;
 
     /**
-     * Simulates the installation without actually installing a package.
+     * If true, simulates the installation without actually installing a package.
      */
     public bool $dryRun = false;
 
     /**
-     * Download only, do not install packages.
+     * If true, downloads only and does not install packages.
      */
     public bool $downloadOnly = false;
 
     /**
-     * Skip installing packages listed in require-dev.
+     * If true, skips installing packages listed in require-dev.
      * The autoloader generation skips the autoload-dev rules.
      */
     public bool $noDev = false;
 
     /**
-     * Skips autoloader generation.
+     * If true, skips autoloader generation.
      */
     public bool $noAutoloader = false;
 
     /**
-     * Removes the progress display that can mess with some terminals or scripts which don't handle backspace
+     * If true, removes the progress display that can mess with some terminals or scripts which don't handle backspace
      * characters.
      */
     public bool $noProgress = false;
 
     /**
-     * Run an audit after installation is complete.
+     * If true, runs an audit after installation is complete.
      */
     public bool $audit = false;
 
     /**
-     * Audit output format. Must be `table`, `plain`, `json`, or `summary` (default).
+     * Audit output format.
      */
-    public string $auditFormat = '';
+    public ?AuditFormat $auditFormat = null;
 
     /**
-     * Convert PSR-0/4 autoloading to classmap to get a faster autoloader.
+     * If true, converts PSR-0/4 autoloading to classmap to get a faster autoloader.
      * This is recommended especially for production, but can take a bit of time to run so it is currently not done by
      * default.
      */
     public bool $optimizeAutoloader = false;
 
     /**
-     * Autoload classes from the classmap only.
+     * If true, autoloads classes from the classmap only.
      * Implicitly enables `--optimize-autoloader`.
      */
     public bool $classmapAuthoritative = false;
 
     /**
-     * Use APCu to cache found/not-found classes.
+     * If true, uses APCu to cache found/not-found classes.
      */
     public bool $apcuAutoloader = false;
 
     /**
-     * Use a custom prefix for the APCu autoloader cache. Implicitly enables `--apcu-autoloader`.
+     * Uses a custom prefix for the APCu autoloader cache.
+     * Implicitly enables `--apcu-autoloader`.
      */
-    public string $apcuAutoloaderPrefix = '';
+    public ?string $apcuAutoloaderPrefix = null;
 
     /**
-     * Ignore all platform requirements (php, hhvm, lib-* and ext-*) and force the installation even if the local
-     * machine does not fulfill these.
+     * If true, ignores all platform requirements (php, hhvm, lib-* and ext-*) and forces the installation even if the
+     * local machine does not fulfill these.
      */
     public bool $ignorePlatformReqs = false;
 
     /**
-     * Ignore a specific platform requirement(php, hhvm, lib-* and ext-*) and force the installation even if the local
+     * Ignores a specific platform requirement(php, hhvm, lib-* and ext-*) and forces the installation even if the local
      * machine does not fulfill it.
+     * Multiple requirements can be ignored via wildcard.
+     * Appending a + makes it only ignore the upper-bound of the requirements.
+     * 
+     * @var array<string>
      */
-    public string $ignorePlatformReq = '';
+    public array $ignorePlatformReq = [];
+
+    #region extends AbstractArguments
 
     /**
-     * Convert the arguments to an array of options
-     * @return array<string, mixed>
+     * @inheritDoc
      */
     public function toOptions(): array
     {
         $options = parent::toOptions();
-        if ($this->preferInstall) {
-            $options['--prefer-install'] = $this->preferInstall;
+        if ($this->preferInstall !== null) {
+            $options['--prefer-install'] = $this->preferInstall->value;
         }
         if ($this->dryRun) {
-            $options['--dry-run'] = $this->dryRun;
+            $options['--dry-run'] = true;
+        }
+        if ($this->downloadOnly) {
+            $options['--download-only'] = true;
         }
         if ($this->noDev) {
-            $options['--no-dev'] = $this->noDev;
+            $options['--no-dev'] = true;
         }
+        if ($this->noAutoloader) {
+            $options['--no-autoloader'] = true;
+        }
+        if ($this->noProgress) {
+            $options['--no-progress'] = true;
+        }
+        if ($this->audit) {
+            $options['--audit'] = true;
+        }
+        if ($this->auditFormat !== null) {
+            $options['--audit-format'] = $this->auditFormat->value;
+        }
+        if ($this->optimizeAutoloader) {
+            $options['--optimize-autoloader'] = true;
+        }
+        if ($this->classmapAuthoritative) {
+            $options['--classmap-authoritative'] = true;
+        }
+        if ($this->apcuAutoloader) {
+            $options['--apcu-autoloader'] = true;
+        }
+        if ($this->apcuAutoloaderPrefix !== null) {
+            $options['--apcu-autoloader-prefix'] = $this->apcuAutoloaderPrefix;
+        }
+        if ($this->ignorePlatformReqs) {
+            $options['--ignore-platform-reqs'] = true;
+        }
+        if (\count($this->ignorePlatformReq) > 0) {
+            $options['--ignore-platform-req'] = $this->ignorePlatformReq;
+        }
+
         return $options;
     }
+
+    #endregion extends AbstractArguments
 }

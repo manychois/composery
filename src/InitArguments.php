@@ -4,98 +4,110 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-class InitArguments extends Arguments
+use Manychois\Composery\ArgumentOptions\MinimumStability;
+use Manychois\Composery\ArgumentOptions\PackageType;
+
+class InitArguments extends AbstractArguments
 {
     /**
      * Name of the package
      */
-    public string $name = '';
+    public ?string $name = null;
     /**
      * Description of the package
      */
-    public string $description = '';
+    public ?string $description = null;
     /**
      * Author name of the package
      */
-    public string $author = '';
+    public ?string $author = null;
     /**
      * Type of package (e.g. library, project, metapackage, composer-plugin)
      */
-    public string $type = '';
+    public ?PackageType $type = null;
     /**
      * Homepage of the package
      */
-    public string $homepage = '';
+    public ?string $homepage = null;
     /**
-     * 'Package to require with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or "foo/bar 1.0.0"
+     * Packages to require with a version constraint.
+     * Should be in format "foo/bar:1.0.0".
+     *
      * @var array<string>
      */
     public array $require = [];
     /**
-     * Package to require for development with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or
-     * "foo/bar 1.0.0"
+     * Packages to require with a version constraint for development.
+     * Should be in format "foo/bar:1.0.0".
+     *
      * @var array<string>
      */
-    public array $requireDev = [];
+    public array $requireDiv = [];
     /**
      * Minimum stability of the package (e.g. dev, alpha, beta, RC, stable)
      */
-    public string $stability = '';
+    public ?MinimumStability $stability = null;
     /**
      * License of the package
      */
-    public string $license = '';
+    public ?string $license = '';
     /**
-     * Add custom repositories, either by URL or using JSON arrays.
+     * Provides one (or more) custom repositories.
+     * An item is a JSON representation of a repository or an HTTP URL pointing to a composer repository.
      * @var array<string>
      */
     public array $repository = [];
     /**
-     * Add PSR-4 autoload mapping. Maps your package\'s namespace to the provided directory.
-     * (Expects a relative path, e.g. src/)
+     * Maps package's namespace to the provided directory.
+     * Expects a relative path, e.g. `src/`
      */
-    public string $autoload = '';
+    public ?string $autoload = null;
+
+    #region extends AbstractArguments
 
     /**
-     * Convert the arguments to an array of options
-     * @return array<string, mixed>
+     * @inheritDoc
      */
     public function toOptions(): array
     {
         $options = parent::toOptions();
-        if ($this->name) {
+
+        if ($this->isSpecified($this->name)) {
             $options['--name'] = $this->name;
         }
-        if ($this->description) {
+        if ($this->isSpecified($this->description)) {
             $options['--description'] = $this->description;
         }
-        if ($this->author) {
+        if ($this->isSpecified($this->author)) {
             $options['--author'] = $this->author;
         }
-        if ($this->type) {
-            $options['--type'] = $this->type;
+        if ($this->type !== null) {
+            $options['--type'] = $this->type->value;
         }
-        if ($this->homepage) {
+        if ($this->isSpecified($this->homepage)) {
             $options['--homepage'] = $this->homepage;
         }
-        if ($this->require) {
+        if (\count($this->require) > 0) {
             $options['--require'] = $this->require;
         }
-        if ($this->requireDev) {
-            $options['--require-dev'] = $this->requireDev;
+        if (\count($this->requireDiv) > 0) {
+            $options['--require-dev'] = $this->requireDiv;
         }
-        if ($this->stability) {
-            $options['--stability'] = $this->stability;
+        if ($this->stability !== null) {
+            $options['--stability'] = $this->stability->value;
         }
-        if ($this->license) {
+        if ($this->isSpecified($this->license)) {
             $options['--license'] = $this->license;
         }
-        if ($this->repository) {
+        if (\count($this->repository) > 0) {
             $options['--repository'] = $this->repository;
         }
-        if ($this->autoload) {
+        if ($this->isSpecified($this->autoload)) {
             $options['--autoload'] = $this->autoload;
         }
+
         return $options;
     }
+
+    #endregion extends AbstractArguments
 }

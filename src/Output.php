@@ -11,19 +11,33 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Output implements OutputInterface
 {
     public int $exitCode = 0;
-    private string $message = '';
+    /**
+     * @var array<string>
+     */
+    private array $lines = [];
+    private string $currentLine = '';
     private int $verbosity = self::VERBOSITY_NORMAL;
     private bool $decorated = false;
+    /**
+     * Formatter is not used in this class, but it is required by OutputInterface.
+     */
     private OutputFormatterInterface $formatter;
 
     public function __construct()
     {
-        $this->formatter = new OutputFormatter(true, []);
+        $this->formatter = new OutputFormatter(false, []);
     }
 
-    public function getMessage(): string
+    /**
+     * @return array<string>
+     */
+    public function getLines(): array
     {
-        return $this->message;
+        $lines = $this->lines;
+        if ($this->currentLine !== '') {
+            $lines[] = $this->currentLine;
+        }
+        return $lines;
     }
 
     #region implements OutputInterface
@@ -41,11 +55,25 @@ class Output implements OutputInterface
             return;
         }
 
-        $msg = is_string($messages) ? $messages : implode(', ', $messages);
-        if ($newline) {
-            $msg .= "\n";
+        if (is_string($messages)) {
+            $this->currentLine .= $messages;
+        } else {
+            foreach ($messages as $message) {
+                $this->currentLine .= $message;
+            }
         }
-        $this->message .= $msg;
+        if ($newline) {
+            $this->currentLine .= "\n";
+        }
+
+        $split = explode("\n", $this->currentLine);
+        $n = \count($split);
+        if ($n > 1) {
+            for ($i = 0; $i < $n - 1; $i++) {
+                $this->lines[] = $split[$i];
+            }
+            $this->currentLine = $split[$n - 1];
+        }
     }
 
     public function writeln(string|iterable $messages, int $options = 0): void

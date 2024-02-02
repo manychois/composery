@@ -4,66 +4,69 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-abstract class Arguments
+/**
+ * Represents the global options for all Composer commands.
+ */
+abstract class AbstractArguments
 {
     /**
-     * Increase verbosity of messages.
+     * If true, increases verbosity of messages.
      */
     public bool $verbose = false;
 
     /**
-     * Display help information.
+     * If true, displays help information.
      */
     public bool $help = false;
 
     /**
-     * Do not output any message.
+     * If true, does not output any message.
      */
     public bool $quiet = false;
 
     /**
-     * Do not ask any interactive question.
+     * If true, does not ask any interactive question.
      */
     public bool $noInteraction = false;
 
     /**
-     * Disables plugins.
+     * If true, disables plugins.
      */
     public bool $noPlugins = false;
 
     /**
-     * Skips execution of scripts defined in `composer.json`.
+     * If true, skips execution of scripts defined in `composer.json`.
      */
     public bool $noScripts = false;
 
     /**
-     * Disables the use of the cache directory. Same as setting the COMPOSER_CACHE_DIR env var to /dev/null
-     * (or NUL on Windows).
+     * If true, disables the use of the cache directory.
+     * Same as setting the `COMPOSER_CACHE_DIR` env var to `/dev/null` (or `NUL` on Windows).
      */
     public bool $noCache = false;
 
     /**
-     * If specified, use the given directory as working directory.
+     * If specified, uses the given directory as working directory.
      */
-    public string $workingDir = '';
+    public ?string $workingDir = null;
 
     /**
-     * Display timing and memory usage information
+     * If true, displays timing and memory usage information.
      */
     public bool $profile = false;
 
     /**
-     * Force ANSI output.
+     * If true, forces ANSI output.
      */
     public bool $ansi = false;
 
     /**
-     * Disable ANSI output.
+     * If true, disables ANSI output.
      */
     public bool $noAnsi = false;
 
     /**
-     * Display this application version.
+     * If true, displays this application version.
      */
     public bool $version = false;
 
@@ -95,7 +98,7 @@ abstract class Arguments
         if ($this->noCache) {
             $options['--no-cache'] = true;
         }
-        if ($this->workingDir) {
+        if ($this->isSpecified($this->workingDir)) {
             $options['--working-dir'] = $this->workingDir;
         }
         if ($this->profile) {
@@ -110,6 +113,12 @@ abstract class Arguments
         if ($this->version) {
             $options['--version'] = true;
         }
+
         return $options;
+    }
+
+    protected function isSpecified(?string $value): bool
+    {
+        return $value !== null && \trim($value) !== '';
     }
 }
