@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-use Manychois\Composery\ArgumentOptions\AuditFormat;
-use Manychois\Composery\ArgumentOptions\InstallPreference;
+use Manychois\Composery\OptionChoices\AuditFormat;
+use Manychois\Composery\OptionChoices\InstallPreference;
 
-class InstallArguments extends AbstractArguments
+/**
+ * Represents the options for the `install` command.
+ */
+class InstallOptions extends AbstractCommandOptions
 {
     /**
      * Sets how composer should install a package.
@@ -25,8 +28,8 @@ class InstallArguments extends AbstractArguments
     public bool $downloadOnly = false;
 
     /**
-     * If true, skips installing packages listed in require-dev.
-     * The autoloader generation skips the autoload-dev rules.
+     * If true, skips installing packages listed in `require-dev`.
+     * The autoloader generation skips the `autoload-dev` rules.
      */
     public bool $noDev = false;
 

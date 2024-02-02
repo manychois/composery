@@ -7,7 +7,7 @@ namespace Manychois\Composery;
 /**
  * Represents the global options for all Composer commands.
  */
-abstract class AbstractArguments
+abstract class AbstractCommandOptions
 {
     /**
      * If true, increases verbosity of messages.
@@ -72,6 +72,7 @@ abstract class AbstractArguments
 
     /**
      * Convert the arguments to an array of options
+     *
      * @return array<string, mixed>
      */
     public function toOptions(): array
@@ -117,6 +118,13 @@ abstract class AbstractArguments
         return $options;
     }
 
+    /**
+     * Returns whether the given value is not null and not empty.
+     *
+     * @param null|string $value The value to check.
+     *
+     * @return bool True if the value is not null and not empty.
+     */
     protected function isSpecified(?string $value): bool
     {
         return $value !== null && \trim($value) !== '';

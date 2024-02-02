@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Manychois\ComposeryTests;
 
 use Manychois\Composery\App;
-use Manychois\Composery\ArgumentOptions\MinimumStability;
-use Manychois\Composery\ArgumentOptions\PackageType;
-use Manychois\Composery\InitArguments;
+use Manychois\Composery\InitOptions;
+use Manychois\Composery\OptionChoices\MinimumStability;
+use Manychois\Composery\OptionChoices\PackageType;
 
 class InitTest extends AbstractCommandTestCase
 {
     public function testInit(): void
     {
         $app = new App();
-        $args = new InitArguments();
+        $args = new InitOptions();
         $args->name = 'manychois/composery-test';
         $args->description = 'Composery test';
         $args->author = 'Tommy Choi';

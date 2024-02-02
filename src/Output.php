@@ -8,6 +8,9 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Represents the output of a command.
+ */
 class Output implements OutputInterface
 {
     public int $exitCode = 0;
@@ -23,12 +26,17 @@ class Output implements OutputInterface
      */
     private OutputFormatterInterface $formatter;
 
+    /**
+     * Initializes a new instance of the Output class.
+     */
     public function __construct()
     {
         $this->formatter = new OutputFormatter(false, []);
     }
 
     /**
+     * Gets the lines of the output.
+     *
      * @return array<string>
      */
     public function getLines(): array
@@ -37,11 +45,15 @@ class Output implements OutputInterface
         if ($this->currentLine !== '') {
             $lines[] = $this->currentLine;
         }
+
         return $lines;
     }
 
     #region implements OutputInterface
 
+    /**
+     * @inheritDoc
+     */
     public function write(string|iterable $messages, bool $newline = false, int $options = 0): void
     {
         $optVerbosity = $options & (
@@ -76,60 +88,93 @@ class Output implements OutputInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function writeln(string|iterable $messages, int $options = 0): void
     {
         $this->write($messages, true, $options);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setVerbosity(int $level): void
     {
         $this->verbosity = $level;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getVerbosity(): int
     {
         return $this->verbosity;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isQuiet(): bool
     {
         return $this->verbosity === self::VERBOSITY_QUIET;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isVerbose(): bool
     {
         return $this->verbosity === self::VERBOSITY_VERBOSE;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isVeryVerbose(): bool
     {
         return $this->verbosity === self::VERBOSITY_VERY_VERBOSE;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isDebug(): bool
     {
         return $this->verbosity === self::VERBOSITY_DEBUG;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setDecorated(bool $decorated): void
     {
         $this->decorated = $decorated;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function isDecorated(): bool
     {
         return $this->decorated;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function setFormatter(OutputFormatterInterface $formatter): void
     {
         $this->formatter = $formatter;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFormatter(): OutputFormatterInterface
     {
         return $this->formatter;
     }
 
-    #endregion
+    #endregion implements OutputInterface
 }

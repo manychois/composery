@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Manychois\Composery\ArgumentOptions;
+namespace Manychois\Composery\OptionChoices;
 
+/**
+ * Represents the minimum stability of a package.
+ */
 enum MinimumStability: string
 {
     case Stable = 'stable';

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Manychois\Composery;
 
-use Manychois\Composery\ArgumentOptions\MinimumStability;
-use Manychois\Composery\ArgumentOptions\PackageType;
+use Manychois\Composery\OptionChoices\MinimumStability;
+use Manychois\Composery\OptionChoices\PackageType;
 
-class InitArguments extends AbstractArguments
+/**
+ * Represents the options for the `init` command.
+ */
+class InitOptions extends AbstractCommandOptions
 {
     /**
      * Name of the package
@@ -54,6 +57,7 @@ class InitArguments extends AbstractArguments
     /**
      * Provides one (or more) custom repositories.
      * An item is a JSON representation of a repository or an HTTP URL pointing to a composer repository.
+     *
      * @var array<string>
      */
     public array $repository = [];

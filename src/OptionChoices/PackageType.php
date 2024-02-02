@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Manychois\Composery\ArgumentOptions;
+namespace Manychois\Composery\OptionChoices;
 
+/**
+ * Represents the type of a package.
+ */
 enum PackageType: string
 {
     case Library = 'library';

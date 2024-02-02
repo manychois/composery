@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Manychois\Composery\ArgumentOptions;
+namespace Manychois\Composery\OptionChoices;
 
+/**
+ * Represents the format of the audit output.
+ */
 enum AuditFormat : string
 {
     case Table = 'table';

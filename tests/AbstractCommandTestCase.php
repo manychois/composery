@@ -19,11 +19,15 @@ abstract class AbstractCommandTestCase extends TestCase
     {
         foreach ($lines as $line) {
             if (\str_contains($line, $part)) {
-                static::assertStringContainsString($part, $line);
+                static::assertTrue(true);
                 return;
             }
         }
-        static::fail("Expected to find {$part} in output lines");
+        static::fail(\sprintf(
+            "Expected to find %s in output lines:\n%s\n=== End of output ===\n",
+            $part,
+            \implode("\n", $lines)
+        ));
     }
 
     /**
@@ -85,6 +89,7 @@ abstract class AbstractCommandTestCase extends TestCase
                     $hasFailedCase |= !\unlink($fullPath);
                 }
             }
+
             return \rmdir($path) && !$hasFailedCase;
         } else {
             return \unlink($path);

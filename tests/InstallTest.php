@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Manychois\ComposeryTests;
 
 use Manychois\Composery\App;
-use Manychois\Composery\ArgumentOptions\AuditFormat;
-use Manychois\Composery\ArgumentOptions\InstallPreference;
-use Manychois\Composery\InstallArguments;
+use Manychois\Composery\InstallOptions;
+use Manychois\Composery\OptionChoices\AuditFormat;
+use Manychois\Composery\OptionChoices\InstallPreference;
 
 class InstallTest extends AbstractCommandTestCase
 {
@@ -34,7 +34,7 @@ JSON;
     public function testInstallDryRun(): void
     {
         $app = new App();
-        $args = new InstallArguments();
+        $args = new InstallOptions();
         $args->preferInstall = InstallPreference::Source;
         $args->dryRun = true;
         $args->optimizeAutoloader = true;
@@ -58,7 +58,7 @@ JSON;
     public function testDownloadOnly(): void
     {
         $app = new App();
-        $args = new InstallArguments();
+        $args = new InstallOptions();
         $args->downloadOnly = true;
         $args->ignorePlatformReqs = true;
         $args->noProgress = true;
@@ -81,7 +81,7 @@ JSON;
     public function testNoAutoloader(): void
     {
         $app = new App();
-        $args = new InstallArguments();
+        $args = new InstallOptions();
         $args->noAutoloader = true;
         $args->audit = true;
         $args->auditFormat = AuditFormat::Plain;
@@ -106,7 +106,7 @@ JSON;
     public function testClassmapAuthoritative(): void
     {
         $app = new App();
-        $args = new InstallArguments();
+        $args = new InstallOptions();
         $args->classmapAuthoritative = true;
         $args->apcuAutoloader = true;
         $args->apcuAutoloaderPrefix = 'apctest';
@@ -123,7 +123,7 @@ JSON;
         static::assertOutputLines($lines, $part);
         static::assertOutputLines($lines, '- Installing <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Installing <info>composer/composer</info>');
-        static::assertOutputLines($lines, '<info>No security vulnerability advisories found</info>');
+        static::assertOutputLines($lines, '<info>No security vulnerability advisories found.</info>');
 
         static::assertTrue(\file_exists($this->cwd . '/composer.lock'));
         static::assertTrue(\file_exists($this->cwd . '/vendor'));
