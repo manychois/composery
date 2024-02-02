@@ -7,12 +7,7 @@ namespace Manychois\ComposeryTests;
 use Manychois\Composery\App;
 use Manychois\Composery\ArgumentOptions\AuditFormat;
 use Manychois\Composery\ArgumentOptions\InstallPreference;
-use Manychois\Composery\ArgumentOptions\MinimumStability;
-use Manychois\Composery\ArgumentOptions\PackageType;
-use Manychois\Composery\InitArguments;
 use Manychois\Composery\InstallArguments;
-
-use function PHPUnit\Framework\directoryExists;
 
 class InstallTest extends AbstractCommandTestCase
 {
@@ -55,7 +50,7 @@ JSON;
         static::assertOutputLines($lines, '<info>Installing dependencies from lock file</info>');
         static::assertOutputLines($lines, '- Installing <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Installing <info>composer/composer</info>');
-        
+
         static::assertFalse(\file_exists($this->cwd . '/composer.lock'));
         static::assertFalse(\file_exists($this->cwd . '/vendor'));
     }
@@ -74,10 +69,11 @@ JSON;
         static::assertOutputLines($lines, '<info>Updating dependencies</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/composer</info>');
-        static::assertOutputLines($lines, '<info>Installing dependencies from lock file (including require-dev)</info>');
+        $part = '<info>Installing dependencies from lock file (including require-dev)</info>';
+        static::assertOutputLines($lines, $part);
         static::assertOutputLineMissing($lines, '- Installing <info>composer/ca-bundle</info>');
         static::assertOutputLineMissing($lines, '- Installing <info>composer/composer</info>');
-        
+
         static::assertTrue(\file_exists($this->cwd . '/composer.lock'));
         static::assertFalse(\file_exists($this->cwd . '/vendor'));
     }
@@ -97,7 +93,8 @@ JSON;
         static::assertOutputLines($lines, '<info>Updating dependencies</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/composer</info>');
-        static::assertOutputLines($lines, '<info>Installing dependencies from lock file (including require-dev)</info>');
+        $part = '<info>Installing dependencies from lock file (including require-dev)</info>';
+        static::assertOutputLines($lines, $part);
         static::assertOutputLines($lines, '- Installing <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Installing <info>composer/composer</info>');
 
@@ -122,7 +119,8 @@ JSON;
         static::assertOutputLines($lines, '<info>Updating dependencies</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Locking <info>composer/composer</info>');
-        static::assertOutputLines($lines, '<info>Installing dependencies from lock file (including require-dev)</info>');
+        $part = '<info>Installing dependencies from lock file (including require-dev)</info>';
+        static::assertOutputLines($lines, $part);
         static::assertOutputLines($lines, '- Installing <info>composer/ca-bundle</info>');
         static::assertOutputLines($lines, '- Installing <info>composer/composer</info>');
         static::assertOutputLines($lines, '<info>No security vulnerability advisories found</info>');

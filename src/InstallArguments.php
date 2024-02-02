@@ -86,7 +86,7 @@ class InstallArguments extends AbstractArguments
      * machine does not fulfill it.
      * Multiple requirements can be ignored via wildcard.
      * Appending a + makes it only ignore the upper-bound of the requirements.
-     * 
+     *
      * @var array<string>
      */
     public array $ignorePlatformReq = [];
