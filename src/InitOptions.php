@@ -67,7 +67,7 @@ class InitOptions extends AbstractCommandOptions
      */
     public ?string $autoload = null;
 
-    #region extends AbstractArguments
+    #region extends AbstractCommandOptions
 
     /**
      * @inheritDoc
@@ -113,5 +113,5 @@ class InitOptions extends AbstractCommandOptions
         return $options;
     }
 
-    #endregion extends AbstractArguments
+    #endregion extends AbstractCommandOptions
 }

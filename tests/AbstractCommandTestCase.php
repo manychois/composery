@@ -20,6 +20,7 @@ abstract class AbstractCommandTestCase extends TestCase
         foreach ($lines as $line) {
             if (\str_contains($line, $part)) {
                 static::assertTrue(true);
+
                 return;
             }
         }
@@ -36,7 +37,14 @@ abstract class AbstractCommandTestCase extends TestCase
     protected static function assertOutputLineMissing(array $lines, string $part): void
     {
         foreach ($lines as $line) {
-            static::assertFalse(\str_contains($line, $part), "Expected $part to be missing but found");
+            static::assertFalse(
+                \str_contains($line, $part),
+                \sprintf(
+                    "Expected %s to be missing but found in output lines:\n%s\n=== End of output ===\n",
+                    $part,
+                    \implode("\n", $lines)
+                ),
+            );
         }
     }
 

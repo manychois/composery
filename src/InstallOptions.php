@@ -94,7 +94,7 @@ class InstallOptions extends AbstractCommandOptions
      */
     public array $ignorePlatformReq = [];
 
-    #region extends AbstractArguments
+    #region extends AbstractCommandOptions
 
     /**
      * @inheritDoc
@@ -148,5 +148,5 @@ class InstallOptions extends AbstractCommandOptions
         return $options;
     }
 
-    #endregion extends AbstractArguments
+    #endregion extends AbstractCommandOptions
 }

@@ -7,6 +7,8 @@ namespace Manychois\Composery;
 use Composer\Console\Application;
 use Manychois\Composery\Output;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
 
 /**
  * A wrapper around Composer's Application class to make it easier to use.
@@ -26,7 +28,7 @@ class App
         $inputArgs = array_merge($inputArgs, $args->toOptions());
         $input = new ArrayInput($inputArgs);
 
-        return $this->run($input);
+        return $this->execute($input);
     }
 
     /**
@@ -42,7 +44,21 @@ class App
         $inputArgs = array_merge($inputArgs, $args->toOptions());
         $input = new ArrayInput($inputArgs);
 
-        return $this->run($input);
+        return $this->execute($input);
+    }
+
+    /**
+     * Runs the given command as if it were entered in the terminal.
+     *
+     * @param string $command The command to run, e.g. "install --dry-run".
+     *
+     * @return Output The command result.
+     */
+    public function runInput(string $command): Output
+    {
+        $input = new StringInput($command);
+
+        return $this->execute($input);
     }
 
     /**
@@ -55,21 +71,24 @@ class App
      */
     public function update(UpdateOptions $args, string ...$packages): Output
     {
-        $updateArgs = ['command' => 'update', 'packages' => $packages];
+        $updateArgs = ['command' => 'update'];
+        if (\count($packages) > 0) {
+            $updateArgs['packages'] = $packages;
+        }
         $updateArgs = array_merge($updateArgs, $args->toOptions());
         $input = new ArrayInput($updateArgs);
 
-        return $this->run($input);
+        return $this->execute($input);
     }
 
     /**
-     * Runs the given command with the given arguments.
+     * Executes the given command with the given arguments.
      *
-     * @param ArrayInput $input The inputs to pass to the command.
+     * @param InputInterface $input The inputs to pass to the command.
      *
      * @return Output The command result.
      */
-    protected function run(ArrayInput $input): Output
+    protected function execute(InputInterface $input): Output
     {
         $input->setInteractive(false);
         $composer = new Application();

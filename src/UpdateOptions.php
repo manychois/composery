@@ -133,4 +133,81 @@ class UpdateOptions extends AbstractCommandOptions
      * Restricts the update to your first degree dependencies.
      */
     public bool $rootReqs = false;
+
+    #region extends AbstractCommandOptions
+
+    /**
+     * @inheritDoc
+     */
+    public function toOptions(): array
+    {
+        $options = parent::toOptions();
+        if ($this->preferInstall !== null) {
+            $options['--prefer-install'] = $this->preferInstall->value;
+        }
+        if ($this->dryRun) {
+            $options['--dry-run'] = true;
+        }
+        if ($this->noDev) {
+            $options['--no-dev'] = true;
+        }
+        if ($this->noInstall) {
+            $options['--no-install'] = true;
+        }
+        if ($this->noAudit) {
+            $options['--no-audit'] = true;
+        }
+        if ($this->auditFormat !== null) {
+            $options['--audit-format'] = $this->auditFormat->value;
+        }
+        if ($this->lock) {
+            $options['--lock'] = true;
+        }
+        if (\count($this->with) > 0) {
+            $options['--with'] = $this->with;
+        }
+        if ($this->noAutoloader) {
+            $options['--no-autoloader'] = true;
+        }
+        if ($this->noProgress) {
+            $options['--no-progress'] = true;
+        }
+        if ($this->withDependencies) {
+            $options['--with-dependencies'] = true;
+        }
+        if ($this->withAllDependencies) {
+            $options['--with-all-dependencies'] = true;
+        }
+        if ($this->optimizeAutoloader) {
+            $options['--optimize-autoloader'] = true;
+        }
+        if ($this->classmapAuthoritative) {
+            $options['--classmap-authoritative'] = true;
+        }
+        if ($this->apcuAutoloader) {
+            $options['--apcu-autoloader'] = true;
+        }
+        if ($this->apcuAutoloaderPrefix !== null) {
+            $options['--apcu-autoloader-prefix'] = $this->apcuAutoloaderPrefix;
+        }
+        if ($this->ignorePlatformReqs) {
+            $options['--ignore-platform-reqs'] = true;
+        }
+        if (\count($this->ignorePlatformReq) > 0) {
+            $options['--ignore-platform-req'] = $this->ignorePlatformReq;
+        }
+        if ($this->preferStable) {
+            $options['--prefer-stable'] = true;
+        }
+        if ($this->preferLowest) {
+            $options['--prefer-lowest'] = true;
+        }
+        if ($this->rootReqs) {
+            $options['--root-reqs'] = true;
+        }
+
+        return $options;
+    }
+
+    #endregion extends AbstractCommandOptions
 }

@@ -31,7 +31,7 @@ JSON;
         \file_put_contents($this->cwd . '/composer.json', $initialComposerJson);
     }
 
-    public function testInstallDryRun(): void
+    public function testDryRun(): void
     {
         $app = new App();
         $args = new InstallOptions();
