@@ -71,51 +71,51 @@ abstract class AbstractCommandOptions
     public bool $version = false;
 
     /**
-     * Convert the arguments to an array of options
+     * Convert the options to an array of parameters.
      *
      * @return array<string, mixed>
      */
-    public function toOptions(): array
+    public function toParameters(): array
     {
-        $options = [];
+        $parameters = [];
         if ($this->verbose) {
-            $options['--verbose'] = true;
+            $parameters['--verbose'] = true;
         }
         if ($this->help) {
-            $options['--help'] = true;
+            $parameters['--help'] = true;
         }
         if ($this->quiet) {
-            $options['--quiet'] = true;
+            $parameters['--quiet'] = true;
         }
         if ($this->noInteraction) {
-            $options['--no-interaction'] = true;
+            $parameters['--no-interaction'] = true;
         }
         if ($this->noPlugins) {
-            $options['--no-plugins'] = true;
+            $parameters['--no-plugins'] = true;
         }
         if ($this->noScripts) {
-            $options['--no-scripts'] = true;
+            $parameters['--no-scripts'] = true;
         }
         if ($this->noCache) {
-            $options['--no-cache'] = true;
+            $parameters['--no-cache'] = true;
         }
         if ($this->isSpecified($this->workingDir)) {
-            $options['--working-dir'] = $this->workingDir;
+            $parameters['--working-dir'] = $this->workingDir;
         }
         if ($this->profile) {
-            $options['--profile'] = true;
+            $parameters['--profile'] = true;
         }
         if ($this->ansi) {
-            $options['--ansi'] = true;
+            $parameters['--ansi'] = true;
         }
         if ($this->noAnsi) {
-            $options['--no-ansi'] = true;
+            $parameters['--no-ansi'] = true;
         }
         if ($this->version) {
-            $options['--version'] = true;
+            $parameters['--version'] = true;
         }
 
-        return $options;
+        return $parameters;
     }
 
     /**

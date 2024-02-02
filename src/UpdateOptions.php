@@ -139,74 +139,74 @@ class UpdateOptions extends AbstractCommandOptions
     /**
      * @inheritDoc
      */
-    public function toOptions(): array
+    public function toParameters(): array
     {
-        $options = parent::toOptions();
+        $parameters = parent::toParameters();
         if ($this->preferInstall !== null) {
-            $options['--prefer-install'] = $this->preferInstall->value;
+            $parameters['--prefer-install'] = $this->preferInstall->value;
         }
         if ($this->dryRun) {
-            $options['--dry-run'] = true;
+            $parameters['--dry-run'] = true;
         }
         if ($this->noDev) {
-            $options['--no-dev'] = true;
+            $parameters['--no-dev'] = true;
         }
         if ($this->noInstall) {
-            $options['--no-install'] = true;
+            $parameters['--no-install'] = true;
         }
         if ($this->noAudit) {
-            $options['--no-audit'] = true;
+            $parameters['--no-audit'] = true;
         }
         if ($this->auditFormat !== null) {
-            $options['--audit-format'] = $this->auditFormat->value;
+            $parameters['--audit-format'] = $this->auditFormat->value;
         }
         if ($this->lock) {
-            $options['--lock'] = true;
+            $parameters['--lock'] = true;
         }
         if (\count($this->with) > 0) {
-            $options['--with'] = $this->with;
+            $parameters['--with'] = $this->with;
         }
         if ($this->noAutoloader) {
-            $options['--no-autoloader'] = true;
+            $parameters['--no-autoloader'] = true;
         }
         if ($this->noProgress) {
-            $options['--no-progress'] = true;
+            $parameters['--no-progress'] = true;
         }
         if ($this->withDependencies) {
-            $options['--with-dependencies'] = true;
+            $parameters['--with-dependencies'] = true;
         }
         if ($this->withAllDependencies) {
-            $options['--with-all-dependencies'] = true;
+            $parameters['--with-all-dependencies'] = true;
         }
         if ($this->optimizeAutoloader) {
-            $options['--optimize-autoloader'] = true;
+            $parameters['--optimize-autoloader'] = true;
         }
         if ($this->classmapAuthoritative) {
-            $options['--classmap-authoritative'] = true;
+            $parameters['--classmap-authoritative'] = true;
         }
         if ($this->apcuAutoloader) {
-            $options['--apcu-autoloader'] = true;
+            $parameters['--apcu-autoloader'] = true;
         }
         if ($this->apcuAutoloaderPrefix !== null) {
-            $options['--apcu-autoloader-prefix'] = $this->apcuAutoloaderPrefix;
+            $parameters['--apcu-autoloader-prefix'] = $this->apcuAutoloaderPrefix;
         }
         if ($this->ignorePlatformReqs) {
-            $options['--ignore-platform-reqs'] = true;
+            $parameters['--ignore-platform-reqs'] = true;
         }
         if (\count($this->ignorePlatformReq) > 0) {
-            $options['--ignore-platform-req'] = $this->ignorePlatformReq;
+            $parameters['--ignore-platform-req'] = $this->ignorePlatformReq;
         }
         if ($this->preferStable) {
-            $options['--prefer-stable'] = true;
+            $parameters['--prefer-stable'] = true;
         }
         if ($this->preferLowest) {
-            $options['--prefer-lowest'] = true;
+            $parameters['--prefer-lowest'] = true;
         }
         if ($this->rootReqs) {
-            $options['--root-reqs'] = true;
+            $parameters['--root-reqs'] = true;
         }
 
-        return $options;
+        return $parameters;
     }
 
     #endregion extends AbstractCommandOptions

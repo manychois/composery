@@ -72,45 +72,44 @@ class InitOptions extends AbstractCommandOptions
     /**
      * @inheritDoc
      */
-    public function toOptions(): array
+    public function toParameters(): array
     {
-        $options = parent::toOptions();
-
+        $parameters = parent::toParameters();
         if ($this->isSpecified($this->name)) {
-            $options['--name'] = $this->name;
+            $parameters['--name'] = $this->name;
         }
         if ($this->isSpecified($this->description)) {
-            $options['--description'] = $this->description;
+            $parameters['--description'] = $this->description;
         }
         if ($this->isSpecified($this->author)) {
-            $options['--author'] = $this->author;
+            $parameters['--author'] = $this->author;
         }
         if ($this->type !== null) {
-            $options['--type'] = $this->type->value;
+            $parameters['--type'] = $this->type->value;
         }
         if ($this->isSpecified($this->homepage)) {
-            $options['--homepage'] = $this->homepage;
+            $parameters['--homepage'] = $this->homepage;
         }
         if (\count($this->require) > 0) {
-            $options['--require'] = $this->require;
+            $parameters['--require'] = $this->require;
         }
         if (\count($this->requireDiv) > 0) {
-            $options['--require-dev'] = $this->requireDiv;
+            $parameters['--require-dev'] = $this->requireDiv;
         }
         if ($this->stability !== null) {
-            $options['--stability'] = $this->stability->value;
+            $parameters['--stability'] = $this->stability->value;
         }
         if ($this->isSpecified($this->license)) {
-            $options['--license'] = $this->license;
+            $parameters['--license'] = $this->license;
         }
         if (\count($this->repository) > 0) {
-            $options['--repository'] = $this->repository;
+            $parameters['--repository'] = $this->repository;
         }
         if ($this->isSpecified($this->autoload)) {
-            $options['--autoload'] = $this->autoload;
+            $parameters['--autoload'] = $this->autoload;
         }
 
-        return $options;
+        return $parameters;
     }
 
     #endregion extends AbstractCommandOptions
