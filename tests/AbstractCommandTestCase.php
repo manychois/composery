@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Manychois\ComposeryTests;
 
 use Exception;
+use Manychois\Composery\App;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractCommandTestCase extends TestCase
 {
     private string $prevCwd;
     protected string $cwd;
+    protected App $app;
 
     /**
      * @param array<string> $lines
@@ -62,6 +64,8 @@ abstract class AbstractCommandTestCase extends TestCase
                 throw new Exception("$path already exists");
             }
         }
+
+        $this->app = new App(__DIR__ . '/composer-home');
     }
 
     protected function tearDown(): void

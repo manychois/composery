@@ -1,5 +1,7 @@
 coverage/
+tests/cwd/*
 !tests/cwd/README.md
-tests/cwd/
+tests/composer-home/*
+!tests/composer-home/README.md
 vendor/
 .phpunit.result.cache

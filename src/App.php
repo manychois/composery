@@ -16,6 +16,16 @@ use Symfony\Component\Console\Input\StringInput;
 class App
 {
     /**
+     * Creates a new App instance.
+     *
+     * @param string $home The path to the composer home directory.
+     */
+    public function __construct(string $home)
+    {
+        $_SERVER['COMPOSER_HOME'] = $home;
+    }
+
+    /**
      * Creates a basic composer.json file in current directory.
      *
      * @param InitOptions $options Options to pass to `composer init`.

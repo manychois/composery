@@ -1,0 +1,1 @@
+This will be the home directory for the composer library during the test.

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Manychois\ComposeryTests;
 
-use Manychois\Composery\App;
 use Manychois\Composery\InstallOptions;
 use Manychois\Composery\OptionChoices\AuditFormat;
 use Manychois\Composery\OptionChoices\InstallPreference;
@@ -33,7 +32,7 @@ JSON;
 
     public function testDryRun(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new InstallOptions();
         $args->preferInstall = InstallPreference::Source;
         $args->dryRun = true;
@@ -57,7 +56,7 @@ JSON;
 
     public function testDownloadOnly(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new InstallOptions();
         $args->downloadOnly = true;
         $args->ignorePlatformReqs = true;
@@ -80,7 +79,7 @@ JSON;
 
     public function testNoAutoloader(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new InstallOptions();
         $args->noAutoloader = true;
         $args->audit = true;
@@ -105,7 +104,7 @@ JSON;
 
     public function testClassmapAuthoritative(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new InstallOptions();
         $args->classmapAuthoritative = true;
         $args->apcuAutoloader = true;

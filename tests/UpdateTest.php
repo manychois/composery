@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Manychois\ComposeryTests;
 
-use Manychois\Composery\App;
 use Manychois\Composery\OptionChoices\AuditFormat;
 use Manychois\Composery\OptionChoices\InstallPreference;
 use Manychois\Composery\UpdateOptions;
@@ -25,7 +24,7 @@ class UpdateTest extends AbstractCommandTestCase
 
     public function testDryRun(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new UpdateOptions();
         $args->preferInstall = InstallPreference::Source;
         $args->dryRun = true;
@@ -53,7 +52,7 @@ class UpdateTest extends AbstractCommandTestCase
 
     public function testAuditFormat(): void
     {
-        $app = new App();
+        $app = $this->app;
         $args = new UpdateOptions();
         $args->auditFormat = AuditFormat::Plain;
         $args->lock = true;
@@ -76,7 +75,7 @@ class UpdateTest extends AbstractCommandTestCase
 
     public function testPackageWithAllDependencies(): void
     {
-        $app = new App();
+        $app = $this->app;
 
         $app->runInput('install');
 
